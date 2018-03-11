@@ -1,0 +1,17 @@
+{
+  "name": "prometheus-statistics",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Paul Bernier",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "express": "^4.16.2",
+    "factom": "0.1.0-rc.1",
+    "prom-client": "^11.0.0"
+  }
+}
