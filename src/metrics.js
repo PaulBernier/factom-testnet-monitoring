@@ -4,7 +4,7 @@ const Promise = require('bluebird');
 
 const POLL_INTERVAL = 5000;
 const cli = new FactomCli({
-    host: 'localhost',
+    host: 'factomd_node',
     port: 8088
 });
 
