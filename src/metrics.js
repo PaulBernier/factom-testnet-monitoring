@@ -28,6 +28,10 @@ const entryMaxSizeGauge = new Gauge({
     name: 'entry_max_size',
     help: 'Max size among entries revealed in the last block'
 });
+const factoidTransactionsGauge = new Gauge({
+    name: 'factoid_transactions_nb',
+    help: 'Number of factoid transactions in the last block'
+});
 
 let lastBlockEvaluated;
 async function evaluateLatestBlock() {
@@ -68,11 +72,17 @@ async function extractStats(head) {
         }
     }
 
+    // Entries stats
     entriesRevealedGauge.set(entriesRevealed);
     entriesRevealedPerSecondGauge.set(entriesRevealed / duration);
     entriesSizeGauge.set(entriesSize);
     entryAverageSizeGauge.set(entriesSize / entriesRevealed);
     entryMaxSizeGauge.set(maxEntrySize);
+
+    // Factoid transactions
+    const fb = await cli.getFactoidBlock(head.getFactoidBlockKeymr());
+    factoidTransactionsGauge.set(fb.transactions.length);
+
     console.log('Finished extracting metrics');
 }
 
