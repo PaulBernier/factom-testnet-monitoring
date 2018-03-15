@@ -901,8 +901,8 @@
     "list": []
   },
   "time": {
-    "from": "2018-03-15T00:26:51.407Z",
-    "to": "2018-03-15T04:26:51.411Z"
+    "from": "now-6h",
+    "to": "now"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -931,5 +931,5 @@
   },
   "timezone": "",
   "title": "Testnet monitoring",
-  "version": 24
+  "version": 25
 }
