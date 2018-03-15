@@ -929,24 +929,24 @@
           "steppedLine": true,
           "targets": [
             {
-              "expr": "factoshis_transfered",
+              "expr": "factoshis_transfered / 100000000",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "Nb of Factoshis transfered",
+              "legendFormat": "FCT transfered",
               "refId": "A"
             },
             {
-              "expr": "factoshis_buy_ec",
+              "expr": "factoshis_buy_ec / 100000000",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "Nb of Factoshis spent on EC",
+              "legendFormat": "FCT spent on EC",
               "refId": "B"
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Factoshis usage",
+          "title": "FCT usage",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -1101,7 +1101,7 @@
               "expr": "fees_paid",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "Total fees paid",
+              "legendFormat": "Total fees paid (factoshis)",
               "refId": "A"
             }
           ],
@@ -1187,5 +1187,5 @@
   },
   "timezone": "",
   "title": "Testnet monitoring",
-  "version": 26
+  "version": 29
 }
