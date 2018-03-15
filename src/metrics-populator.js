@@ -1,6 +1,6 @@
 const Promise = require('bluebird'),
     { FactomCli } = require('factom'),
-    metrics = [require('./factoid-metrics'), require('./entries-metrics')];
+    metrics = [require('./entrycredit-metrics'), require('./factoid-metrics'), require('./entries-metrics')];
 
 const cli = new FactomCli({
     host: 'factomd_node',
