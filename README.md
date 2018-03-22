@@ -10,6 +10,8 @@ docker build -t factom-testnet-prometheus github.com/PaulBernier/factom-testnet-
 docker run --rm --name=factom-testnet-prometheus --network=communitytestnet_factomd -d -p 1789:1789 factom-testnet-prometheus
 # Verify the metrics are available
 curl 127.0.0.1:1789/metrics
+# You can also check pm2 logs
+docker exec factom-testnet-prometheus pm2 logs
 ```
 
 ## Configure Prometheus
