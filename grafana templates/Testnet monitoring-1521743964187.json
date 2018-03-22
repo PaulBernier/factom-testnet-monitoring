@@ -33,6 +33,12 @@
       "id": "singlestat",
       "name": "Singlestat",
       "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "text",
+      "name": "Text",
+      "version": ""
     }
   ],
   "annotations": {
@@ -1148,6 +1154,27 @@
       "showTitle": false,
       "title": "Dashboard Row",
       "titleSize": "h6"
+    },
+    {
+      "collapse": false,
+      "height": 53,
+      "panels": [
+        {
+          "content": "Source code of this tool available at <a href=\"https://github.com/PaulBernier/factom-testnet-monitoring\">https://github.com/PaulBernier/factom-testnet-monitoring</a>",
+          "id": 13,
+          "links": [],
+          "mode": "html",
+          "span": 12,
+          "title": "",
+          "type": "text"
+        }
+      ],
+      "repeat": null,
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": false,
+      "title": "Dashboard Row",
+      "titleSize": "h6"
     }
   ],
   "schemaVersion": 14,
@@ -1187,5 +1214,5 @@
   },
   "timezone": "",
   "title": "Testnet monitoring",
-  "version": 29
+  "version": 31
 }
