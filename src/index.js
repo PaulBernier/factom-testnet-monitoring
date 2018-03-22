@@ -3,7 +3,7 @@ const express = require('express'),
     { register } = require('prom-client'),
     { MetricsPopulator } = require('./metrics-populator');
 
-const POLL_INTERVAL = 5000;
+const POLL_INTERVAL = 10000;
 
 const metricsPopulator = new MetricsPopulator(POLL_INTERVAL);
 metricsPopulator.startPopulating();

@@ -9,12 +9,12 @@ const cli = new FactomCli({
 
 class MetricsPopulator {
     constructor(pollInterval) {
-        this.pollInterval = pollInterval || 5000;
+        this.pollInterval = pollInterval || 10000;
         this.lastBlockEvaluated = 0;
     }
 
     async startPopulating() {
-        await this.populate();
+        await this.populate().catch(handleError);
         setTimeout(this.startPopulating.bind(this), this.pollInterval);
     }
 
@@ -31,6 +31,14 @@ class MetricsPopulator {
                 console.error(e);
             }
         }
+    }
+}
+
+function handleError(e) {
+    if (e.code === 'ECONNREFUSED' || e.code === 'ENOTFOUND') {
+        console.error('Connection to factomd failed: ' + e.message);
+    } else {
+        console.error(e);
     }
 }
 
