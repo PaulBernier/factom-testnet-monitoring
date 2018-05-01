@@ -23,10 +23,9 @@ const entryMaxSizeGauge = new Gauge({
 });
 
 exports.computeMetrics = async function(cli, head) {
-
     const ebs = await Promise.map(
-        head.getRegularEntryBlockRefs(),
-        eb => cli.getEntryBlock(eb.keymr));
+        head.entryBlockRefs,
+        ref => cli.getEntryBlock(ref.keyMR));
 
     let entriesRevealed = 0,
         entriesSize = 0,
@@ -36,20 +35,38 @@ exports.computeMetrics = async function(cli, head) {
         entriesRevealed += eb.entryRefs.length;
         const entries = await Promise.map(eb.entryRefs, ref => cli.getEntry(ref.entryHash));
         for (let entry of entries) {
-            entriesSize += entry.size;
-            if (entry.size > maxEntrySize) {
-                maxEntrySize = entry.size;
+            const size = entry.size();
+            entriesSize += size;
+            if (size > maxEntrySize) {
+                maxEntrySize = size;
             }
         }
     }
 
-    const previous = await cli.getDirectoryBlock(head.previousBlockKeymr);
+    return {
+        entriesRevealed,
+        entriesSize,
+        maxEntrySize,
+        averageEntrySize: entriesRevealed ? entriesSize / entriesRevealed : 0
+    };
+};
+
+exports.exportMetrics = async function(cli, head) {
+
+    const {
+        entriesRevealed,
+        entriesSize,
+        maxEntrySize,
+        averageEntrySize
+    } = await exports.computeMetrics(cli, head);
+
+    const previous = await cli.getDirectoryBlock(head.previousBlockKeyMR);
     const duration = head.timestamp - previous.timestamp;
 
     // Populate gauges
     entriesRevealedGauge.set(entriesRevealed);
     entriesRevealedPerSecondGauge.set(duration ? entriesRevealed / duration : 0);
     entriesSizeGauge.set(entriesSize);
-    entryAverageSizeGauge.set(entriesRevealed ? entriesSize / entriesRevealed : 0);
+    entryAverageSizeGauge.set(averageEntrySize);
     entryMaxSizeGauge.set(maxEntrySize);
 };

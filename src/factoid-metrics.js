@@ -22,7 +22,7 @@ const totalFeesPaidGauge = new Gauge({
 });
 
 exports.computeMetrics = async function(cli, head) {
-    const fb = await cli.getFactoidBlock(head.getFactoidBlockKeymr());
+    const fb = await cli.getFactoidBlock(head.factoidBlockRef);
     const ecRate = fb.entryCreditRate;
 
     let totalFactoshisTransfered = 0,
@@ -34,9 +34,27 @@ exports.computeMetrics = async function(cli, head) {
         totalFeesPaid += transaction.feesPaid;
     }
 
-    factoidTransactionsGauge.set(fb.transactions.length);
+    return {
+        numberOfTransactions: fb.transactions.length,
+        totalFactoshisTransfered,
+        totalFactoshisSpentOnEc,
+        totalFeesPaid,
+        totalECsBought: ecRate ? totalFactoshisSpentOnEc / ecRate : 0
+    };
+};
+
+exports.exportMetrics = async function(cli, head) {
+    const {
+        numberOfTransactions,
+        totalFactoshisTransfered,
+        totalFactoshisSpentOnEc,
+        totalFeesPaid,
+        totalECsBought
+    } = await exports.computeMetrics(cli, head);
+
+    factoidTransactionsGauge.set(numberOfTransactions);
     totalFactoshisTransferedGauge.set(totalFactoshisTransfered);
     totalFactoshisUsedToBuyECGauge.set(totalFactoshisSpentOnEc);
     totalFeesPaidGauge.set(totalFeesPaid);
-    totalECsBoughtGauge.set(ecRate ? totalFactoshisSpentOnEc / ecRate : 0);
+    totalECsBoughtGauge.set(totalECsBought);
 };

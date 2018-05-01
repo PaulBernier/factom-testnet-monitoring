@@ -3,7 +3,7 @@ const Promise = require('bluebird'),
     metrics = [require('./entrycredit-metrics'), require('./factoid-metrics'), require('./entries-metrics')];
 
 const cli = new FactomCli({
-    host: 'factomd_node',
+    host: '52.202.51.229',
     port: 8088
 });
 
@@ -23,7 +23,7 @@ class MetricsPopulator {
         if (head.height !== this.lastBlockEvaluated) {
             console.log(`Extracting metrics from block ${head.height}...`);
             try {
-                await Promise.each(metrics, m => m.computeMetrics(cli, head));
+                await Promise.each(metrics, m => m.exportMetrics(cli, head));
                 this.lastBlockEvaluated = head.height;
                 console.log(`Finished extracting metrics for block ${head.height}`);
             } catch (e) {
