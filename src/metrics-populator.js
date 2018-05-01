@@ -3,7 +3,7 @@ const Promise = require('bluebird'),
     metrics = [require('./entrycredit-metrics'), require('./factoid-metrics'), require('./entries-metrics')];
 
 const cli = new FactomCli({
-    host: '52.202.51.229',
+    host: 'factomd_node',
     port: 8088
 });
 
