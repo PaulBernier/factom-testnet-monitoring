@@ -11,6 +11,7 @@ const cli = new FactomCli({
 });
 
 const FACTOSHIS_IN_FACTOID = 100000000;
+const SLEEP = 50;
 
 async function traverseBlockchain(from, to) {
     if (from > to) {
@@ -29,6 +30,7 @@ async function traverseBlockchain(from, to) {
                 lastBlock = copyInstance(db);
             }
             firstBlock = copyInstance(db);
+            await sleep(SLEEP);
             await aggregator.aggregate(db);
         }
         db = await cli.getDirectoryBlock(db.previousBlockKeyMR);
@@ -96,3 +98,7 @@ class MetricsAggregator {
 
 const args = process.argv.slice(2);
 traverseBlockchain(parseInt(args[0]), parseInt(args[1]));
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
