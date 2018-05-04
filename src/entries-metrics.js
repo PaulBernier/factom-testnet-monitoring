@@ -1,4 +1,5 @@
 const Promise = require('bluebird'),
+    chunk = require('lodash.chunk'),
     { Gauge } = require('prom-client');
 
 const entriesRevealedGauge = new Gauge({
@@ -23,9 +24,9 @@ const entryMaxSizeGauge = new Gauge({
 });
 
 exports.computeMetrics = async function(cli, head) {
-    const ebs = await Promise.map(
-        head.entryBlockRefs,
-        ref => cli.getEntryBlock(ref.keyMR));
+    // TODO: ugly
+    const local = cli.factomd.getFactomNode().includes('localhost');
+    const ebs = await chunkPromiseMap(head.entryBlockRefs, ref => cli.getEntryBlock(ref.keyMR), local);
 
     let entriesRevealed = 0,
         entriesSize = 0,
@@ -33,7 +34,8 @@ exports.computeMetrics = async function(cli, head) {
 
     for (let eb of ebs) {
         entriesRevealed += eb.entryRefs.length;
-        const entries = await Promise.map(eb.entryRefs, ref => cli.getEntry(ref.entryHash));
+        const entries = await chunkPromiseMap(eb.entryRefs, ref => cli.getEntry(ref.entryHash), local);
+
         for (let entry of entries) {
             const size = entry.size();
             entriesSize += size;
@@ -50,6 +52,17 @@ exports.computeMetrics = async function(cli, head) {
         averageEntrySize: entriesRevealed ? entriesSize / entriesRevealed : 0
     };
 };
+
+async function chunkPromiseMap(iter, lambda, local) {
+    const inputChunks = chunk(iter, local ? 1000 : 100);
+    
+    const outputChunks = [];
+    for (const c of inputChunks) {
+        const mapped = await Promise.map(c, lambda);
+        outputChunks.push(mapped);
+    }
+    return [].concat.apply([], outputChunks);
+}
 
 exports.exportMetrics = async function(cli, head) {
 
