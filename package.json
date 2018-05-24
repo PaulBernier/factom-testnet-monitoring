@@ -11,7 +11,7 @@
   "dependencies": {
     "bluebird": "^3.5.1",
     "express": "^4.16.2",
-    "factom": "0.1.6",
+    "factom": "0.2.0",
     "prom-client": "^11.0.0"
   }
 }
