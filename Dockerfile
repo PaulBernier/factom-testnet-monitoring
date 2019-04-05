@@ -1,4 +1,4 @@
-FROM keymetrics/pm2:8-stretch
+FROM keymetrics/pm2:latest-alpine
 
 # Bundle APP files
 RUN mkdir -p app
